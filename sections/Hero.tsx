@@ -6,35 +6,67 @@ import { gsap } from "@/lib/gsap"
 import { marqueeTools, profile, site } from "@/data/site"
 import { useReducedMotion } from "@/hooks/useMotion"
 
+const HERO_VISIBLE = {
+  title: { opacity: 1, y: 0, filter: "blur(0px)" },
+  fade: { opacity: 1, y: 0 },
+} as const
+
+let heroIntroPlayed = false
+
+function revealHero(scope: HTMLElement) {
+  gsap.set(scope.querySelectorAll(".hero__title, .hero__subtitle"), HERO_VISIBLE.title)
+  gsap.set(scope.querySelectorAll(".hero__marquee-wrap, .hero__profile"), HERO_VISIBLE.fade)
+}
+
 export function Hero() {
   const rootRef = useRef<HTMLElement>(null)
   const reduced = useReducedMotion()
 
   useGSAP(
     () => {
-      if (reduced || !rootRef.current) return
+      const scope = rootRef.current
+      if (!scope) return
 
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } })
+      if (reduced) {
+        revealHero(scope)
+        return
+      }
 
-      tl.from([".hero__title", ".hero__subtitle"], {
-        opacity: 0,
-        y: 20,
-        filter: "blur(10px)",
-        duration: 1.25,
-        ease: "power3.out",
+      if (heroIntroPlayed) {
+        revealHero(scope)
+        return
+      }
+
+      heroIntroPlayed = true
+
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        onComplete: () => {
+          gsap.set(scope.querySelectorAll(".hero__title, .hero__subtitle"), {
+            clearProps: "transform,filter,willChange",
+          })
+          gsap.set(scope.querySelectorAll(".hero__marquee-wrap, .hero__profile"), {
+            clearProps: "transform,willChange",
+          })
+        },
       })
-        .from(
-          ".hero__marquee-wrap",
-          { y: 18, opacity: 0, duration: 0.65 },
+
+      tl.to(scope.querySelectorAll(".hero__title, .hero__subtitle"), {
+        ...HERO_VISIBLE.title,
+        duration: 1.25,
+      })
+        .to(
+          scope.querySelector(".hero__marquee-wrap"),
+          { ...HERO_VISIBLE.fade, duration: 0.65 },
           "-=0.4",
         )
-        .from(
-          ".hero__profile",
-          { y: 18, opacity: 0, duration: 0.65 },
+        .to(
+          scope.querySelector(".hero__profile"),
+          { ...HERO_VISIBLE.fade, duration: 0.65 },
           "-=0.45",
         )
     },
-    { scope: rootRef, dependencies: [reduced] },
+    { scope: rootRef, dependencies: [reduced], revertOnUpdate: false },
   )
 
   const profileLine = [

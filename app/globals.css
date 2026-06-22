@@ -23,7 +23,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "DM Sans", "Noto Sans SC", sans-serif;
+  font-family: var(--font-dm-sans), var(--font-noto-sans-sc), sans-serif;
   background: var(--bg);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
@@ -93,7 +93,6 @@ ul {
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.02em;
-  will-change: transform, opacity, filter;
 }
 
 .hero__subtitle {
@@ -101,7 +100,23 @@ ul {
   font-size: clamp(1rem, 2.2vw, 1.35rem);
   font-weight: 500;
   color: rgba(255, 255, 255, 0.82);
-  will-change: transform, opacity, filter;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__title,
+  .hero__subtitle {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(10px);
+    will-change: transform, opacity, filter;
+  }
+
+  .hero__marquee-wrap,
+  .hero__profile {
+    opacity: 0;
+    transform: translateY(18px);
+    will-change: transform, opacity;
+  }
 }
 
 .hero__subtitle .hero__powered {
@@ -133,7 +148,7 @@ ul {
 
 .hero__marquee-track span {
   padding-right: 3rem;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: clamp(0.7rem, 1.5vw, 0.85rem);
   letter-spacing: 0.04em;
   color: rgba(255, 255, 255, 0.45);
@@ -147,7 +162,7 @@ ul {
 .hero__marquee-static {
   margin: 0;
   padding: 0 var(--pad);
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.75rem;
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.45);
@@ -228,7 +243,7 @@ ul {
 
 .work__hint {
   margin: 0 0 0.75rem;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.72rem;
   letter-spacing: 0.06em;
   color: var(--muted);
@@ -320,7 +335,7 @@ ul {
 
 .work-tab__num {
   flex-shrink: 0;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.72rem;
   color: var(--muted);
   padding-top: 0.1rem;
@@ -355,7 +370,7 @@ ul {
 }
 
 .work-tab__status {
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.62rem;
   letter-spacing: 0.03em;
   padding: 0;
@@ -383,7 +398,7 @@ ul {
 }
 
 .work-tab__links a {
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.7rem;
   letter-spacing: 0.04em;
   color: var(--accent);
@@ -583,7 +598,7 @@ ul {
 
 .work-detail__cat {
   margin: 0;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.68rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -641,7 +656,7 @@ ul {
 
 .work-detail__label {
   margin: 0 0 0.85rem;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.68rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -683,7 +698,7 @@ ul {
 
 .work-detail__btn {
   padding: 0.55rem 1.1rem;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.75rem;
   letter-spacing: 0.06em;
   background: var(--ink);
@@ -730,7 +745,7 @@ ul {
 }
 
 .tech-lanes__label {
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -749,7 +764,7 @@ ul {
 }
 
 .tech-lanes__items li {
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.78rem;
   line-height: 1.45;
   color: var(--muted);
@@ -792,7 +807,7 @@ ul {
 
 .stack-flow__layer-name {
   display: inline-block;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.65rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -811,7 +826,7 @@ ul {
   align-items: center;
   gap: 0.35rem;
   padding: 0.4rem 0.7rem;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.68rem;
   background: #fff;
   border: 1px solid var(--line);
@@ -990,7 +1005,7 @@ ul {
 
 .timeline-item__date {
   display: block;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: clamp(0.72rem, 0.95vw, 0.84rem);
   line-height: 1.45;
   letter-spacing: 0.04em;
@@ -1054,7 +1069,7 @@ ul {
 }
 
 .timeline-item__tag {
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.75rem;
   letter-spacing: 0.02em;
   padding: 0.3rem 0.55rem;
@@ -1072,7 +1087,7 @@ ul {
 
 .timeline-item__pills a {
   padding: 0.4rem 0.75rem;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 3px;
@@ -1169,7 +1184,7 @@ ul {
 .contact__link {
   display: inline-block;
   margin-top: 2rem;
-  font-family: "DM Mono", monospace;
+  font-family: var(--font-dm-mono), monospace;
   font-size: clamp(0.85rem, 1.8vw, 1rem);
   letter-spacing: 0.04em;
   color: var(--muted);
