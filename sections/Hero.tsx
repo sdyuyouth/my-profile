@@ -20,7 +20,7 @@ export function Hero() {
         opacity: 0,
         y: 20,
         filter: "blur(10px)",
-        duration: 0.85,
+        duration: 1.25,
         ease: "power3.out",
       })
         .from(
