@@ -397,7 +397,7 @@ export const experience: Experience[] = [
     id: "qidongli",
     start: "2025.02",
     end: "2025.04",
-    company: "企动力",
+    company: "中企动力（临沂分公司）",
     role: "全栈开发工程师",
     summary:
       "参与外贸客户管理 SaaS 研发，负责多源获客模块集成与后端异步任务架构。将 Facebook、Google Maps、广交会等数据源统一接入，支撑销售团队批量采集、清洗与跟进潜客。",
