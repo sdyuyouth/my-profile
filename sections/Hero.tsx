@@ -13,9 +13,18 @@ const HERO_VISIBLE = {
 
 let heroIntroPlayed = false
 
+function markHeroRevealed(scope: HTMLElement) {
+  scope.classList.add("hero--revealed")
+}
+
 function revealHero(scope: HTMLElement) {
-  gsap.set(scope.querySelectorAll(".hero__title, .hero__subtitle"), HERO_VISIBLE.title)
-  gsap.set(scope.querySelectorAll(".hero__marquee-wrap, .hero__profile"), HERO_VISIBLE.fade)
+  markHeroRevealed(scope)
+  gsap.set(scope.querySelectorAll(".hero__title, .hero__subtitle"), {
+    clearProps: "opacity,transform,filter,willChange",
+  })
+  gsap.set(scope.querySelectorAll(".hero__marquee-wrap, .hero__profile"), {
+    clearProps: "opacity,transform,willChange",
+  })
 }
 
 export function Hero() {
@@ -41,14 +50,7 @@ export function Hero() {
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
-        onComplete: () => {
-          gsap.set(scope.querySelectorAll(".hero__title, .hero__subtitle"), {
-            clearProps: "transform,filter,willChange",
-          })
-          gsap.set(scope.querySelectorAll(".hero__marquee-wrap, .hero__profile"), {
-            clearProps: "transform,willChange",
-          })
-        },
+        onComplete: () => revealHero(scope),
       })
 
       tl.to(scope.querySelectorAll(".hero__title, .hero__subtitle"), {
