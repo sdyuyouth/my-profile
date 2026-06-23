@@ -7,9 +7,10 @@ const TITLE = "鲁越森 · 全栈工程师 · Built Everything by Vibe Coding"
 const DESCRIPTION =
   "全栈工程师鲁越森，Powered by AI。Vibe Coding 交付 Agent 平台、B2B 独立站与自动化工具。"
 
-// Set NEXT_PUBLIC_SITE_URL to the production origin in Cloudflare Pages env vars
-// so OpenGraph / canonical URLs resolve absolutely. Falls back to localhost.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+// Production origin used to resolve OpenGraph / canonical URLs absolutely.
+// Defaults to the live domain so the social preview works without any env setup;
+// override with NEXT_PUBLIC_SITE_URL if the domain ever changes.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://profile.imatrix.tech"
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
