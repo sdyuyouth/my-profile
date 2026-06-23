@@ -37,13 +37,15 @@ export const metadata: Metadata = {
     siteName: "鲁越森 · 个人作品集",
     title: TITLE,
     description: DESCRIPTION,
-    images: [{ url: "/og.png", width: 1197, height: 630, alt: TITLE }],
+    images: [
+      { url: "/og.jpg", width: 1197, height: 630, alt: TITLE, type: "image/jpeg" },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: ["/og.png"],
+    images: ["/og.jpg"],
   },
 }
 
