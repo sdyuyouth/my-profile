@@ -4,6 +4,7 @@ import { useRef } from "react"
 import { useGSAP } from "@gsap/react"
 import { gsap } from "@/lib/gsap"
 import { LineShadowText } from "@/components/LineShadowText"
+import { CopyButton } from "@/components/CopyButton"
 import { site } from "@/data/site"
 import { useReducedMotion } from "@/hooks/useMotion"
 
@@ -53,9 +54,9 @@ export function Contact() {
         </LineShadowText>
       </div>
 
-      <a className="contact__link" href={`mailto:${site.email}`}>
-        联系我 ↗
-      </a>
+      <CopyButton className="contact__link" value={site.email} label="邮箱">
+        {site.email}
+      </CopyButton>
     </footer>
   )
 }

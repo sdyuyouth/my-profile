@@ -44,6 +44,15 @@ export const site = {
   name: "鲁越森",
   hero: {
     title: "Built Everything by Vibe Coding",
+    // Rotated after the intro; first entry is the SSR/initial title.
+    titles: [
+      "Built Everything by Vibe Coding",
+      "Spec First, Then Vibe",
+      "Describe It — Agents Build It",
+      "From Prompt to Production",
+      "Ship at the Speed of Thought",
+      "Specs In, Software Out",
+    ],
     subtitle: "全栈工程师 鲁越森",
     poweredBy: "Powered by AI",
   },
@@ -442,4 +451,84 @@ export const statusLabels: Record<ProjectStatus, string> = {
   "local-dev": "仅本地开发环节可见",
   closed: "未开源",
   open: "已上线",
+}
+
+export type MethodTool = {
+  name: string
+  mode: string
+  role: string
+  desc: string
+  points: string[]
+}
+
+export type MethodStat = {
+  value: number
+  decimals?: number
+  suffix?: string
+  label: string
+  source: string
+}
+
+export type MethodStep = {
+  tag: string
+  title: string
+  desc: string
+}
+
+export type MethodData = {
+  eyebrow: string
+  title: string
+  lead: string
+  tools: MethodTool[]
+  rule: { simple: string; simpleTool: string; complex: string; complexTool: string }
+  flowLabel: string
+  stats: MethodStat[]
+  steps: MethodStep[]
+}
+
+export const method: MethodData = {
+  eyebrow: "Workflow",
+  title: "我如何 Vibe Coding",
+  lead: "Cursor 与 Claude Code 双工具协作，上下文工程打底、Spec 驱动开发——常规任务交给自动档快速迭代，难题切到 Opus 4.8 Extra 深度推理。",
+  tools: [
+    {
+      name: "Cursor",
+      mode: "Auto",
+      role: "日常 · 高频",
+      desc: "多文件补全、快速迭代、常规重构——交给 Cursor 自动档全程跑，保持手感与节奏。",
+      points: ["自动模型选路", "多文件编辑", "即时补全"],
+    },
+    {
+      name: "Claude Code",
+      mode: "Opus 4.8 · Max",
+      role: "攻坚 · 复杂",
+      desc: "架构设计、难点攻坚、长链路推理——切到 Opus 4.8 Extra，把硬骨头啃下来。",
+      points: ["复杂架构", "深度推理", "疑难调试"],
+    },
+  ],
+  rule: {
+    simple: "简单任务",
+    simpleTool: "Cursor · Auto",
+    complex: "复杂任务",
+    complexTool: "Claude Code · Opus 4.8 Extra",
+  },
+  flowLabel: "我的 Agentic SDD 工作流",
+  stats: [
+    { value: 262702, label: "AI 行编辑", source: "Cursor" },
+    { value: 208.4, decimals: 1, suffix: "M", label: "Tokens", source: "Claude Code" },
+    { value: 35091, label: "对话消息", source: "Claude Code" },
+    { value: 63, label: "会话", source: "Claude Code" },
+  ],
+  steps: [
+    { tag: "Context", title: "上下文工程", desc: "CLAUDE.md · MCP · 库上下文" },
+    { tag: "Spec", title: "规范先行", desc: "PRD · 接口契约 · 验收标准" },
+    { tag: "Plan", title: "计划编排", desc: "任务 DAG · subagent 编排" },
+    { tag: "Design", title: "契约设计", desc: "类型先行 · 接口 / Schema" },
+    { tag: "Build", title: "分层实现", desc: "模型路由 · Auto / Opus Extra" },
+    { tag: "Verify", title: "闭环校验", desc: "lint · 类型 · 测试 · 自纠错" },
+    { tag: "Review", title: "人工评审", desc: "逐 diff · HITL 把关副作用" },
+    { tag: "Git", title: "版本管控", desc: "原子提交 · 分支 · PR 自审" },
+    { tag: "Ship", title: "上线部署", desc: "CI/CD · Deploy Hook" },
+    { tag: "Retro", title: "复盘沉淀", desc: "回写 rules / memory 闭环" },
+  ],
 }

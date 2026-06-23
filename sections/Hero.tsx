@@ -1,10 +1,16 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useGSAP } from "@gsap/react"
 import { gsap } from "@/lib/gsap"
+import { CopyButton } from "@/components/CopyButton"
 import { marqueeTools, profile, site } from "@/data/site"
 import { useReducedMotion } from "@/hooks/useMotion"
+
+const HERO_TITLES = site.hero.titles
+const HOLD_S = 3 // pause on each slogan
+const TYPE_PER_CHAR = 0.05 // base seconds/char, shaped by the ease curve
+const ERASE_PER_CHAR = 0.03
 
 const HERO_VISIBLE = {
   title: { opacity: 1, y: 0, filter: "blur(0px)" },
@@ -30,23 +36,27 @@ function revealHero(scope: HTMLElement) {
 export function Hero() {
   const rootRef = useRef<HTMLElement>(null)
   const reduced = useReducedMotion()
+  const [title, setTitle] = useState<string>(HERO_TITLES[0])
+  const [ghostChar, setGhostChar] = useState("")
+  const [ghostOpacity, setGhostOpacity] = useState(0)
+  const [typing, setTyping] = useState(false)
+  const [introDone, setIntroDone] = useState(false)
 
   useGSAP(
     () => {
       const scope = rootRef.current
       if (!scope) return
 
-      if (reduced) {
+      if (reduced || heroIntroPlayed) {
         revealHero(scope)
-        return
-      }
-
-      if (heroIntroPlayed) {
-        revealHero(scope)
+        setIntroDone(true)
         return
       }
 
       heroIntroPlayed = true
+      // start the rotation clock now so the first 3s hold overlaps the intro
+      // entrance (reveal still happens on complete, before the first erase)
+      setIntroDone(true)
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
@@ -71,6 +81,50 @@ export function Hero() {
     { scope: rootRef, dependencies: [reduced], revertOnUpdate: false },
   )
 
+  // Typewriter rotation. A GSAP-eased char counter (proxy.n) drives the speed
+  // curve; its fractional part fades the *leading* character in/out so chars
+  // flow continuously instead of snapping — no per-character stutter.
+  useEffect(() => {
+    if (reduced || !introDone || HERO_TITLES.length <= 1) return
+
+    const proxy = { n: HERO_TITLES[0].length }
+    const tl = gsap.timeline({ repeat: -1 })
+
+    // settled text, leading char, and its opacity all update in one React
+    // commit so the ghost→solid handoff never drops a frame.
+    const paint = (target: string) => {
+      const n = Math.max(0, proxy.n)
+      const floor = Math.floor(n)
+      setTitle(target.slice(0, floor))
+      setGhostChar(target[floor] ?? "")
+      setGhostOpacity(n - floor)
+    }
+
+    HERO_TITLES.forEach((current, i) => {
+      const next = HERO_TITLES[(i + 1) % HERO_TITLES.length]
+
+      tl.to({}, { duration: HOLD_S })
+        .to(proxy, {
+          n: 0,
+          duration: Math.max(0.35, current.length * ERASE_PER_CHAR),
+          ease: "power2.inOut",
+          onStart: () => setTyping(true),
+          onUpdate: () => paint(current),
+        })
+        .to(proxy, {
+          n: next.length,
+          duration: Math.max(0.5, next.length * TYPE_PER_CHAR),
+          ease: "power2.inOut",
+          onUpdate: () => paint(next),
+          onComplete: () => setTyping(false),
+        })
+    })
+
+    return () => {
+      tl.kill()
+    }
+  }, [reduced, introDone])
+
   const profileLine = [
     `${profile.age} 岁`,
     profile.grade,
@@ -85,7 +139,20 @@ export function Hero() {
   return (
     <section id="hero" ref={rootRef} className="hero">
       <div className="hero__center">
-        <h1 className="hero__title">{site.hero.title}</h1>
+        <h1 className="hero__title" aria-label={HERO_TITLES[0]}>
+          <span className="hero__title-text">{title}</span>
+          <span
+            className="hero__title-ghost"
+            style={{ opacity: ghostOpacity }}
+            aria-hidden="true"
+          >
+            {ghostChar}
+          </span>
+          <span
+            className={`hero__caret${typing ? " hero__caret--typing" : ""}`}
+            aria-hidden="true"
+          />
+        </h1>
         <p className="hero__subtitle">
           {site.hero.subtitle}
           <span className="hero__dot"> · </span>
@@ -109,9 +176,13 @@ export function Hero() {
       <div className="hero__profile">
         <p className="hero__profile-meta">{profileLine}</p>
         <p className="hero__profile-contact">
-          <a href={`tel:${site.phone}`}>{site.phone}</a>
+          <CopyButton value={site.phone} label="手机号">
+            {site.phone}
+          </CopyButton>
           <span> · </span>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <CopyButton value={site.email} label="邮箱">
+            {site.email}
+          </CopyButton>
           <span> · </span>
           <a href={site.github} target="_blank" rel="noopener noreferrer">
             {site.githubLabel} ↗
