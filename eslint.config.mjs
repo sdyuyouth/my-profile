@@ -5,4 +5,10 @@ import { fileURLToPath } from "url"
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const compat = new FlatCompat({ baseDirectory: __dirname })
 
-export default [...compat.extends("next/core-web-vitals")]
+const config = [
+  // build artifacts / reference material — never lint these
+  { ignores: ["dist/**", "out/**", ".next/**", "node_modules/**", "_ref/**"] },
+  ...compat.extends("next/core-web-vitals"),
+]
+
+export default config
