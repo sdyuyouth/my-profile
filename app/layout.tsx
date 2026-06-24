@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Providers } from "@/components/Providers"
-import { fontVariables } from "@/lib/fonts"
+import "@/lib/fonts"
 import "./globals.css"
 
 const TITLE = "鲁越森 · 全栈工程师 · Built Everything by Vibe Coding"
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-CN" className={fontVariables}>
+    <html lang="zh-CN">
       <body>
         <Providers>{children}</Providers>
       </body>

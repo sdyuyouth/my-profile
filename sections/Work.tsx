@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useGSAP } from "@gsap/react"
 import { gsap, ScrollTrigger } from "@/lib/gsap"
 import type { Project } from "@/data/site"
@@ -37,6 +37,29 @@ export function Work() {
   const reduced = useReducedMotion()
   const mobile = useIsMobile(800)
   const pinned = !reduced && !mobile
+  // The pin ScrollTrigger is created only AFTER mount. On a phone the very first
+  // (SSR-matching) render assumes desktop, so without this gate a pin would be
+  // built and then torn down when `mobile` resolves — and GSAP leaves its
+  // pin-spacer behind, opening a tall blank gap under the mobile carousel.
+  const [pinReady, setPinReady] = useState(false)
+  useEffect(() => setPinReady(true), [])
+
+  // On mobile the Work section's height changes a lot (pinned grid → carousel,
+  // plus any stray pin-spacer removed). Both must happen BEFORE we recompute
+  // ScrollTrigger, otherwise sections below (Journey/Method) cache stale scroll
+  // positions and never reveal. Runs as a plain effect (after useGSAP's
+  // layout-effect cleanup) and refreshes on the next frame once layout settles.
+  useEffect(() => {
+    if (!mobile) return
+    const pin = pinRef.current
+    const spacer = pin?.parentElement
+    if (pin && spacer?.classList.contains("pin-spacer")) {
+      spacer.replaceWith(pin)
+      pin.removeAttribute("style")
+    }
+    const id = requestAnimationFrame(() => ScrollTrigger.refresh())
+    return () => cancelAnimationFrame(id)
+  }, [mobile])
 
   const project = projects[active] ?? projects[0]
 
@@ -172,7 +195,7 @@ export function Work() {
 
   useGSAP(
     () => {
-      if (!sectionRef.current || !pinRef.current || !pinned) {
+      if (!sectionRef.current || !pinRef.current || !pinned || !pinReady) {
         stRef.current = null
         return
       }
@@ -195,11 +218,14 @@ export function Work() {
 
       stRef.current = st
       return () => {
-        st.kill()
+        // kill(true) reverts the pin (removes the pin-spacer) on the desktop→
+        // mobile resize path. The phone-load path is handled by `pinReady`,
+        // which keeps this trigger from ever being created on a phone.
+        st.kill(true)
         stRef.current = null
       }
     },
-    { scope: sectionRef, dependencies: [pinned] },
+    { scope: sectionRef, dependencies: [pinned, pinReady] },
   )
 
   const goToProject = useCallback(
@@ -233,6 +259,9 @@ export function Work() {
     <section id="work" ref={sectionRef} className="work">
       <div ref={pinRef} className="work__pin">
         <div className="work__inner">
+          {mobile ? (
+            <WorkMobileCarousel />
+          ) : (
           <div className="work__grid">
             <aside className="work__sidebar">
               <h2 className="work__heading">我都做过什么项目</h2>
@@ -272,9 +301,289 @@ export function Work() {
               </div>
             </div>
           </div>
+          )}
         </div>
       </div>
     </section>
+  )
+}
+
+/**
+ * Phones get a horizontal swipe carousel — one project per screen, swipe
+ * left/right to switch, each card scrolls vertically for its own long content.
+ * Replaces both the pinned scroll-hijack and the horizontal tab strip, which
+ * both read as broken on touch. Native scroll-snap drives the paging; an rAF
+ * scroll handler tracks the centred slide for the counter + dots.
+ */
+function WorkMobileCarousel() {
+  const trackRef = useRef<HTMLDivElement>(null)
+  const rafRef = useRef(0)
+  const [active, setActive] = useState(0)
+
+  const slidesOf = (track: HTMLElement) =>
+    Array.from(track.querySelectorAll<HTMLElement>(".work__swipe-slide"))
+
+  const onScroll = () => {
+    if (rafRef.current) return
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0
+      const track = trackRef.current
+      if (!track) return
+      const center = track.scrollLeft + track.clientWidth / 2
+      let best = 0
+      let bestDist = Infinity
+      slidesOf(track).forEach((s, i) => {
+        const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - center)
+        if (d < bestDist) {
+          bestDist = d
+          best = i
+        }
+      })
+      setActive(best)
+    })
+  }
+
+  const goTo = (i: number) => {
+    const track = trackRef.current
+    if (!track) return
+    const slide = slidesOf(track)[i]
+    if (!slide) return
+    track.scrollTo({
+      left: slide.offsetLeft - (track.clientWidth - slide.offsetWidth) / 2,
+      behavior: "smooth",
+    })
+  }
+
+  useEffect(
+    () => () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    },
+    [],
+  )
+
+  // When the finger moves mostly vertically, release the horizontal track so the
+  // page can scroll down to Journey. Without this, overflow-x:auto on the track
+  // captures every touch that starts on a card.
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    let startX = 0
+    let startY = 0
+    let axis: "x" | "y" | null = null
+
+    const reset = () => {
+      axis = null
+      track.style.overflowX = ""
+    }
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return
+      startX = e.touches[0].clientX
+      startY = e.touches[0].clientY
+      axis = null
+      track.style.overflowX = ""
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return
+      const dx = e.touches[0].clientX - startX
+      const dy = e.touches[0].clientY - startY
+
+      if (!axis) {
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return
+        axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y"
+      }
+
+      if (axis === "y") {
+        track.style.overflowX = "hidden"
+      }
+    }
+
+    track.addEventListener("touchstart", onTouchStart, { passive: true })
+    track.addEventListener("touchmove", onTouchMove, { passive: true })
+    track.addEventListener("touchend", reset, { passive: true })
+    track.addEventListener("touchcancel", reset, { passive: true })
+
+    return () => {
+      track.removeEventListener("touchstart", onTouchStart)
+      track.removeEventListener("touchmove", onTouchMove)
+      track.removeEventListener("touchend", reset)
+      track.removeEventListener("touchcancel", reset)
+      track.style.overflowX = ""
+    }
+  }, [])
+
+  return (
+    <div className="work__swipe">
+      <header className="work__swipe-head">
+        <h2 className="work__heading">我都做过什么项目</h2>
+        <p className="work__swipe-hint">
+          <span className="work__swipe-count">
+            {String(active + 1).padStart(2, "0")}
+            <span className="work__swipe-count-sep"> / </span>
+            {String(projects.length).padStart(2, "0")}
+          </span>
+          <span className="work__swipe-hint-text">左右滑动切换项目</span>
+        </p>
+      </header>
+
+      <div
+        ref={trackRef}
+        className="work__swipe-track"
+        onScroll={onScroll}
+        role="group"
+        aria-label="项目列表"
+      >
+        {projects.map((p, i) => (
+          <article
+            key={p.id}
+            className="work__swipe-slide"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} / ${projects.length}`}
+          >
+            <WorkMobileCard project={p} index={i} />
+          </article>
+        ))}
+      </div>
+
+      <div className="work__dots" role="group" aria-label="项目导航">
+        {projects.map((p, i) => (
+          <button
+            key={p.id}
+            type="button"
+            className={`work__dot${active === i ? " work__dot--on" : ""}`}
+            aria-label={`查看第 ${i + 1} 个项目：${p.title}`}
+            aria-current={active === i}
+            onClick={() => goTo(i)}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const WM_FACETS = [
+  { id: "overview", label: "概览" },
+  { id: "features", label: "功能" },
+  { id: "tech", label: "技术" },
+  { id: "details", label: "详情" },
+] as const
+
+type WmFacet = (typeof WM_FACETS)[number]["id"]
+
+/**
+ * A single project card for the phone carousel. The header (number / status /
+ * title) and a segmented control stay fixed; the four facets — overview,
+ * features, tech, details — swap inside a fixed-height panel, so the card's
+ * height never changes as the reader taps between them.
+ */
+function WorkMobileCard({ project, index }: { project: Project; index: number }) {
+  const [facet, setFacet] = useState<WmFacet>("overview")
+  const linkable = project.status === "open" && (project.demo || project.repo)
+
+  return (
+    <div className="work__swipe-card">
+      <div className="wm-card__top">
+        <span className="wm-card__index">{String(index + 1).padStart(2, "0")}</span>
+        <span className={`wm-card__status wm-card__status--${project.status}`}>
+          {statusLabels[project.status]}
+        </span>
+      </div>
+
+      <p className="wm-card__cat">{project.category}</p>
+      <h3 className="wm-card__title">{project.title}</h3>
+
+      <div className="wm-seg" role="tablist" aria-label="项目信息">
+        {WM_FACETS.map((f) => (
+          <button
+            key={f.id}
+            type="button"
+            role="tab"
+            aria-selected={facet === f.id}
+            className={`wm-seg__btn${facet === f.id ? " wm-seg__btn--on" : ""}`}
+            onClick={() => setFacet(f.id)}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="wm-panel" role="tabpanel">
+        <div key={facet} className="wm-panel__inner">
+          {facet === "overview" && (
+            <>
+              <p className="wm-panel__summary">{project.summary}</p>
+              <ul className="wm-panel__points">
+                {project.features.map((f) => (
+                  <li key={f.title}>{f.title}</li>
+                ))}
+              </ul>
+              {linkable && (
+                <div className="wm-card__actions">
+                  {project.demo && (
+                    <a
+                      className="wm-card__btn"
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Live ↗
+                    </a>
+                  )}
+                  {project.repo && (
+                    <a
+                      className="wm-card__btn wm-card__btn--ghost"
+                      href={project.repo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Repo ↗
+                    </a>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+
+          {facet === "features" && (
+            <ul className="wm-panel__features">
+              {project.features.map((f) => (
+                <li key={f.title}>
+                  <strong>{f.title}</strong>
+                  <span>{f.desc}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {facet === "tech" && (
+            <ul className="wm-panel__tech">
+              {project.stackLayers.map((layer) => (
+                <li key={layer.layer} className="wm-panel__lane">
+                  <span className="wm-panel__lane-name">{layer.layer}</span>
+                  <div className="wm-panel__lane-items">
+                    {layer.items.map((it) => (
+                      <span key={it} className="wm-panel__chip">
+                        {it}
+                      </span>
+                    ))}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {facet === "details" && (
+            <ul className="wm-panel__details">
+              {project.details.map((d) => (
+                <li key={d}>{d}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -1,19 +1,27 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useGSAP } from "@gsap/react"
 import { gsap, ScrollTrigger } from "@/lib/gsap"
 import { experience } from "@/data/site"
-import { useReducedMotion } from "@/hooks/useMotion"
+import { useIsMobile, useReducedMotion } from "@/hooks/useMotion"
 
 export function Journey() {
   const ref = useRef<HTMLElement>(null)
   const reduced = useReducedMotion()
+  const mobile = useIsMobile(800)
+  // Defer setup until after mount so `mobile` is already resolved. Otherwise the
+  // desktop-assumed first render builds the scrubbed ScrollTriggers, and on a
+  // phone they aren't fully reverted — they keep overriding the cards' opacity,
+  // so the cards never appear. Gating here means they're only ever built once
+  // we know which path (mobile IO vs desktop scrub) to take.
+  const [ready, setReady] = useState(false)
+  useEffect(() => setReady(true), [])
 
   useGSAP(
     () => {
       const root = ref.current
-      if (!root) return
+      if (!root || !ready) return
 
       const timeline = root.querySelector<HTMLElement>(".timeline")
       const axis = root.querySelector<HTMLElement>(".timeline__axis")
@@ -42,6 +50,48 @@ export function Journey() {
 
       positionAxis()
       ScrollTrigger.addEventListener("refresh", positionAxis)
+
+      if (mobile) {
+        // On mobile the Work section above relayouts on the flip, leaving
+        // ScrollTrigger positions stale; and useGSAP's revert eats async tweens.
+        // So drive reveals with CSS classes toggled by an IntersectionObserver —
+        // classes survive every revert and IO is immune to layout shifts. The
+        // axis is just drawn statically.
+        //
+        // First, hard-kill any scrubbed triggers a desktop-assumed first render
+        // created in this section (kill(true) clears the inline opacity:0 they
+        // leave on the cards, which would otherwise win over the CSS classes).
+        ScrollTrigger.getAll().forEach((st) => {
+          if (st.trigger && root.contains(st.trigger)) st.kill(true)
+        })
+
+        if (fill) gsap.set(fill, { height: "100%" })
+        const cards = items
+          .map((item) => item.querySelector<HTMLElement>(".timeline-item__card"))
+          .filter((c): c is HTMLElement => c !== null)
+        cards.forEach((card) => {
+          gsap.set(card, { clearProps: "all" }) // drop any leftover inline gsap styles
+          card.classList.add("tl-reveal")
+        })
+
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return
+              entry.target.classList.add("tl-reveal--in")
+              entry.target.closest(".timeline-item")?.classList.add("is-active")
+              io.unobserve(entry.target)
+            })
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+        )
+        cards.forEach((card) => io.observe(card))
+
+        return () => {
+          ScrollTrigger.removeEventListener("refresh", positionAxis)
+          io.disconnect()
+        }
+      }
 
       // The axis "draws" itself — starts the moment the section enters and
       // completes by the time its center hits mid-viewport (fast, satisfying).
@@ -127,7 +177,7 @@ export function Journey() {
         ScrollTrigger.removeEventListener("refresh", positionAxis)
       }
     },
-    { scope: ref, dependencies: [reduced] },
+    { scope: ref, dependencies: [reduced, mobile, ready] },
   )
 
   // Spotlight follows the cursor: feed pointer position into CSS vars.

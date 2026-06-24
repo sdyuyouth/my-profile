@@ -11,6 +11,11 @@
   --pad: clamp(1.25rem, 4vw, 3rem);
   --max: 72rem;
   --max-work: 96rem;
+  --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-noto-sans-sc: "Noto Sans SC", sans-serif;
+  --font-dm-mono: "DM Mono", ui-monospace, monospace;
+  --scrollbar-size: 1px;
+  --scrollbar-thumb: #111;
 }
 
 * {
@@ -19,6 +24,8 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
 }
 
 body {
@@ -28,6 +35,71 @@ body {
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+}
+
+/* global hairline B/W scrollbars — solid #111/#fff, no grey alpha */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 0;
+  border: none;
+  min-height: 2.5rem;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: #000;
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* viewport thumb inverts on dark sections (Journey/Hero) — still pure B/W */
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background: #fff;
+  mix-blend-mode: difference;
+  border: none;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+  background: #fff;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+/* hide arrow buttons — keeps the bar a clean hairline */
+*::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 ::selection {
@@ -770,7 +842,7 @@ html.smooth-cursor-active * {
 }
 
 .work-detail:not(.work-detail--compact) .work-detail__highlights {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.65rem;
   margin-bottom: 1.5rem;
 }
@@ -857,6 +929,368 @@ html.smooth-cursor-active * {
   background: transparent;
   color: var(--ink);
   border: 1px solid var(--ink);
+}
+
+/* ── Work · mobile swipe carousel ──
+   Rendered only when `mobile` is true (the phone path), so these classes never
+   appear in the desktop DOM and need no media-query guard. One project per
+   screen; native x-scroll-snap pages between them, each card scrolls its own
+   long content vertically. */
+.work__swipe {
+  width: 100%;
+}
+
+.work__swipe-head {
+  margin-bottom: 1.1rem;
+  padding-inline: var(--pad);
+}
+
+.work__swipe-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0.55rem 0 0;
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.work__swipe-count {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.work__swipe-count-sep {
+  opacity: 0.5;
+}
+
+.work__swipe-hint-text {
+  letter-spacing: 0.04em;
+}
+
+/* full-bleed horizontal scroller; slides sit at 88% so neighbours peek (the
+   swipe affordance), centred snap keeps the active card middle-aligned. Cards
+   size to their own (collapsed) content — top-aligned, no fixed height. */
+.work__swipe-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding-inline: 6%;
+  overflow-x: auto;
+  /* clip (not hidden/auto) — hidden/auto make a vertical scrollport that eats
+     touch drags on card content; visible + overflow-x:auto also computes to auto */
+  overflow-y: clip;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 6%;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.work__swipe-track::-webkit-scrollbar {
+  display: none;
+}
+
+.work__swipe-slide {
+  flex: 0 0 88%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+.work__swipe-card {
+  min-width: 0;
+  padding: 1.35rem 1.2rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px -14px rgba(0, 0, 0, 0.3);
+}
+
+.wm-card__top {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+
+.wm-card__index {
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.wm-card__status {
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.03em;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--muted);
+}
+
+.wm-card__status--open {
+  color: #3d6b00;
+  background: rgba(61, 107, 0, 0.09);
+}
+
+.wm-card__cat {
+  margin: 0;
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.wm-card__title {
+  margin: 0.3rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* ── segmented control: 概览 / 功能 / 技术 / 详情 ── */
+.wm-seg {
+  display: flex;
+  gap: 0.15rem;
+  margin-top: 0.95rem;
+  padding: 0.2rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+
+.wm-seg__btn {
+  flex: 1;
+  padding: 0.4rem 0.2rem;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--muted);
+  border-radius: 7px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.wm-seg__btn--on {
+  font-weight: 600;
+  color: var(--ink);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* facet panel — a plain min-height block, NOT a scroll container. A scroll
+   container here trapped both gestures: it swallowed horizontal swipes (so cards
+   wouldn't page) and blocked the page from scrolling on vertical swipes even
+   when nothing overflowed. As a block, short facets sit at the min height and
+   tall ones grow the card; the page scrolls to reveal the overflow, and
+   horizontal swipes fall through to the carousel track. */
+.wm-panel {
+  min-height: clamp(11rem, 32vh, 16rem);
+  margin-top: 0.85rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wm-panel__inner {
+    animation: wm-facet-in 0.3s ease;
+  }
+}
+
+@keyframes wm-facet-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* overview facet */
+.wm-panel__summary {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.wm-panel__points {
+  margin: 0.85rem 0 0;
+  padding: 0.85rem 0 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.wm-panel__points li {
+  position: relative;
+  padding-left: 0.95rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.wm-panel__points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--accent);
+}
+
+/* features facet */
+.wm-panel__features {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.wm-panel__features li {
+  padding: 0.6rem 0.7rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-left: 2px solid var(--accent);
+  border-radius: 0 5px 5px 0;
+}
+
+.wm-panel__features strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--ink);
+}
+
+.wm-panel__features span {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* tech facet */
+.wm-panel__tech {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.wm-panel__lane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.wm-panel__lane-name {
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.wm-panel__lane-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.wm-panel__chip {
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+/* details facet */
+.wm-panel__details {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.wm-panel__details li {
+  position: relative;
+  padding-left: 0.85rem;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.wm-panel__details li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.wm-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.wm-card__btn {
+  padding: 0.4rem 0.85rem;
+  font-family: var(--font-dm-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 3px;
+  transition: opacity 0.2s;
+}
+
+.wm-card__btn:hover {
+  opacity: 0.85;
+}
+
+.wm-card__btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+
+.work__dots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  padding-inline: var(--pad);
+}
+
+.work__dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+  transition:
+    width 0.25s ease,
+    background 0.25s ease;
+}
+
+.work__dot--on {
+  width: 22px;
+  background: var(--accent);
 }
 
 /* tech lanes */
@@ -1233,6 +1667,23 @@ html.smooth-cursor-active * {
 .timeline-item__card:hover {
   border-color: rgba(255, 255, 255, 0.18);
   box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.85);
+}
+
+/* mobile one-shot reveal — class-driven (so useGSAP's revert can't undo it),
+   toggled by an IntersectionObserver in Journey.tsx */
+.timeline-item__card.tl-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.timeline-item__card.tl-reveal--in {
+  opacity: 1;
+  transform: none;
 }
 
 /* cursor-following spotlight (sits above the card fill, below the text) */
@@ -1881,20 +2332,44 @@ html.smooth-cursor-active * {
 
 /* ── Responsive ── */
 @media (max-width: 800px) {
-  .work__pin {
-    padding: clamp(1.5rem, 5vh, 2.5rem) var(--pad);
+  /* phone safety net: any stray overflow is clipped instead of widening the
+     page (which previously cut every section below the hero off-screen) */
+  html,
+  body {
+    overflow-x: clip;
   }
 
+  .work__pin {
+    /* stop forcing a 100vh flex-centred block; no side padding so the swipe
+       carousel can run edge-to-edge (its header/dots pad themselves) */
+    display: block;
+    min-height: 0;
+    padding: clamp(2rem, 6vh, 3rem) 0;
+  }
+
+  /* minmax(0,1fr) lets the single column shrink below its content's min-content;
+     a plain 1fr keeps min-width:auto and the stack content blows the page wide */
   .work__grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
     height: auto;
     max-height: none;
+  }
+
+  .work__panel,
+  .work__card,
+  .work-detail {
+    min-width: 0;
   }
 
   .work__card {
     height: auto;
     min-height: 0;
+  }
+
+  /* four tech lanes are too narrow side-by-side on a phone → 2×2 */
+  .work-detail:not(.work-detail--compact) .stack-flow__cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .work__slide {
@@ -1984,6 +2459,51 @@ html.smooth-cursor-active * {
   .method__stats {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem 1rem;
+  }
+}
+
+/* ── phones ── */
+@media (max-width: 560px) {
+  /* the hero sits tight on small screens — trim the oversized vertical gaps */
+  .hero {
+    gap: 1.5rem;
+    padding: 4rem var(--pad) 2.5rem;
+  }
+
+  /* the contact slogan no longer scrolls sideways off-screen — it wraps to two
+     centred lines, and the line-shadow overlay wraps with it so it stays aligned */
+  .contact__slogan-wrap {
+    overflow-x: visible;
+  }
+
+  .contact__slogan {
+    font-size: clamp(1.7rem, 8.5vw, 2.6rem);
+    line-height: 1.28;
+    white-space: normal;
+    max-width: 100%;
+  }
+
+  .contact__slogan.line-shadow-text {
+    white-space: normal;
+  }
+
+  .contact__slogan.line-shadow-text::after {
+    white-space: normal;
+    overflow: visible;
+  }
+
+  /* keep the four metrics legible — two per row with a touch more breathing room */
+  .method__stats {
+    padding: 1.5rem 0;
+  }
+
+  .method-stat__num {
+    font-size: clamp(1.5rem, 8vw, 2rem);
+  }
+
+  /* tighten the work tab strip so each card peeks the next one (scroll affordance) */
+  .work-tab {
+    min-width: 12.5rem;
   }
 }
 
