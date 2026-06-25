@@ -14,8 +14,12 @@
   --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-noto-sans-sc: "Noto Sans SC", sans-serif;
   --font-dm-mono: "DM Mono", ui-monospace, monospace;
-  --scrollbar-size: 1px;
-  --scrollbar-thumb: #111;
+  --scrollbar-size: 11px;
+  /* ScrollbarTheme.tsx swaps these per visible section: the track is painted
+     with the section's own background (so it fuses with it instead of showing
+     the light body canvas), and the thumb is a contrasting translucent colour */
+  --scrollbar-track: var(--bg-dark);
+  --scrollbar-thumb: rgba(140, 140, 140, 0.5);
 }
 
 * {
@@ -24,8 +28,12 @@
 
 html {
   scroll-behavior: smooth;
+  /* Modern Chrome (121+) honours this standard property and ignores the
+     ::-webkit-scrollbar rules below, so the track colour MUST live here too —
+     a transparent track here is what leaked the light body canvas as a white
+     strip. --scrollbar-track is the current section's bg (see ScrollbarTheme). */
   scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) transparent;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 body {
@@ -37,69 +45,44 @@ body {
   overflow-x: hidden;
 }
 
-/* global hairline B/W scrollbars — solid #111/#fff, no grey alpha */
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
+/* minimal scrollbars — the track is painted with the current section's own
+   background colour (`--scrollbar-track`, set per-section by ScrollbarTheme.tsx)
+   so it fuses with the page instead of revealing the light body canvas in the
+   gutter. The thumb (`--scrollbar-thumb`) is a contrasting translucent colour,
+   inset and rounded via the 3px transparent border + padding-box clip.
+   (mix-blend-mode can't be used here — Chrome doesn't blend scrollbar pseudo-
+   elements.) */
 *::-webkit-scrollbar {
   width: var(--scrollbar-size);
   height: var(--scrollbar-size);
+  background: var(--scrollbar-track);
 }
 
-html::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track,
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-html::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb,
-*::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: 0;
-  border: none;
-  min-height: 2.5rem;
-}
-
-html::-webkit-scrollbar-thumb:hover,
-body::-webkit-scrollbar-thumb:hover,
-*::-webkit-scrollbar-thumb:hover {
-  background: #000;
-}
-
-html::-webkit-scrollbar-corner,
-body::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track-piece,
 *::-webkit-scrollbar-corner {
-  background: transparent;
+  background: var(--scrollbar-track);
 }
 
-/* viewport thumb inverts on dark sections (Journey/Hero) — still pure B/W */
-html::-webkit-scrollbar-thumb,
-body::-webkit-scrollbar-thumb {
-  background: #fff;
-  mix-blend-mode: difference;
-  border: none;
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.3s ease;
 }
 
-html::-webkit-scrollbar-thumb:hover,
-body::-webkit-scrollbar-thumb:hover {
-  background: #fff;
-}
-
-html::-webkit-scrollbar-track,
-body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scrollbar-thumb) transparent;
-}
-
-/* hide arrow buttons — keeps the bar a clean hairline */
+/* hide arrow buttons — keeps the bar clean */
 *::-webkit-scrollbar-button {
   display: none;
   width: 0;
   height: 0;
+}
+
+/* Firefox: same variables drive the thin native scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 ::selection {

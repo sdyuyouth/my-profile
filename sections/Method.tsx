@@ -149,50 +149,82 @@ export function Method() {
         }
       }
 
-      gsap.from(".method__header > *", {
-        y: 24,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.12,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".method__header", start: "top 82%", once: true },
+      // Reveal each block when it actually enters the viewport. ScrollTrigger
+      // was mis-firing these on page load (before the layout above settled), so
+      // the animations played while the user was still up at the hero and were
+      // gone by the time they scrolled down. IntersectionObserver keys purely off
+      // real visibility, so each block reveals exactly when it's seen.
+      const revealObservers: IntersectionObserver[] = []
+      const whenVisible = (el: Element | null, play: () => void) => {
+        if (!el) return
+        const io = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((e) => e.isIntersecting)) {
+              play()
+              io.disconnect()
+            }
+          },
+          { rootMargin: "0px 0px -18% 0px" },
+        )
+        io.observe(el)
+        revealObservers.push(io)
+      }
+
+      // hidden start states, set now so nothing flashes before its reveal
+      gsap.set(".method__header > *", { y: 24, opacity: 0 })
+      gsap.set(".method-tool", { y: 32, opacity: 0 })
+      gsap.set(".method-step", { y: 22, opacity: 0 })
+      nums.forEach((el) => {
+        el.textContent = fmt(0, decimalsOf(el), suffixOf(el))
       })
 
-      gsap.from(".method-tool", {
-        y: 32,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".method__tools", start: "top 80%", once: true },
-      })
+      whenVisible(root.querySelector(".method__header"), () =>
+        gsap.to(".method__header > *", {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          stagger: 0.12,
+          ease: "power3.out",
+        }),
+      )
+
+      whenVisible(root.querySelector(".method__tools"), () =>
+        gsap.to(".method-tool", {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          stagger: 0.15,
+          ease: "power3.out",
+        }),
+      )
 
       // reveal the steps, then draw the connector through their settled centres
-      gsap.from(".method-step", {
-        y: 22,
-        opacity: 0,
-        duration: 0.55,
-        stagger: 0.07,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".method__snake", start: "top 84%", once: true },
-        onComplete: drawSnake,
-      })
+      whenVisible(root.querySelector(".method__snake"), () =>
+        gsap.to(".method-step", {
+          y: 0,
+          opacity: 1,
+          duration: 0.55,
+          stagger: 0.07,
+          ease: "power3.out",
+          onComplete: drawSnake,
+        }),
+      )
 
       // count each metric up from zero when the stats row enters view
-      nums.forEach((el) => {
-        const target = Number(el.dataset.value)
-        const decimals = decimalsOf(el)
-        const suffix = suffixOf(el)
-        const obj = { v: 0 }
-        el.textContent = fmt(0, decimals, suffix)
-        gsap.to(obj, {
-          v: target,
-          duration: 1.6,
-          ease: "power2.out",
-          scrollTrigger: { trigger: ".method__stats", start: "top 85%", once: true },
-          onUpdate: () => {
-            el.textContent = fmt(obj.v, decimals, suffix)
-          },
+      whenVisible(root.querySelector(".method__stats"), () => {
+        nums.forEach((el) => {
+          const target = Number(el.dataset.value)
+          const decimals = decimalsOf(el)
+          const suffix = suffixOf(el)
+          const obj = { v: 0 }
+          gsap.to(obj, {
+            v: target,
+            duration: 1.6,
+            ease: "power2.out",
+            onUpdate: () => {
+              el.textContent = fmt(obj.v, decimals, suffix)
+            },
+          })
         })
       })
 
@@ -210,6 +242,7 @@ export function Method() {
       return () => {
         ScrollTrigger.removeEventListener("refresh", onRefresh)
         io.disconnect()
+        revealObservers.forEach((o) => o.disconnect())
         cometTween?.kill()
       }
     },
