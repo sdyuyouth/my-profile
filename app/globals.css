@@ -428,6 +428,10 @@ html.smooth-cursor-active * {
   flex-direction: column;
   min-height: 0;
   height: 100%;
+  /* drop the heading down so it lines up with the project title on the right:
+     the right title sits below the card's top padding + the category line above
+     it. Tweak the +1.4rem if the alignment needs a nudge. */
+  padding-top: calc(clamp(1.35rem, 2.5vw, 2rem) + 1.4rem);
 }
 
 .work__heading {
