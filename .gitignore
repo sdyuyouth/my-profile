@@ -6,3 +6,9 @@ dist
 .env*
 .DS_Store
 _ref
+
+# book content project
+books/
+
+# local scripts and credentials (boss-cli helpers, form automation)
+.tools/
