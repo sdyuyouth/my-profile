@@ -12,3 +12,7 @@ books/
 
 # local scripts and credentials (boss-cli helpers, form automation)
 .tools/
+
+# local archives and accidental artifacts
+*.zip
+h.includes('post')

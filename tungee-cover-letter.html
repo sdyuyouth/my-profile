@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>求职信 — 探迹科技 · 鲁越森</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      margin: 0;
+      padding: 48px 20px 64px;
+      font-family: "PingFang SC", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.75;
+      color: #1a1a1a;
+      background: #f7f7f5;
+    }
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #e8e8e6;
+      box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .header {
+      padding: 40px 48px 32px;
+      border-bottom: 1px solid #eee;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .name {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #111;
+    }
+    .tagline {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: #666;
+      letter-spacing: 0.02em;
+    }
+    .meta {
+      text-align: right;
+      font-size: 12px;
+      color: #888;
+      line-height: 1.7;
+    }
+    .meta strong { color: #444; font-weight: 500; }
+    .to-line {
+      margin: 28px 0 0;
+      font-size: 14px;
+      color: #444;
+    }
+    .body { padding: 36px 48px 48px; }
+    .lead {
+      margin: 0 0 28px;
+      font-size: 15px;
+      color: #333;
+    }
+    h2 {
+      margin: 36px 0 14px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #999;
+    }
+    h2:first-of-type { margin-top: 0; }
+    p { margin: 0 0 14px; color: #333; }
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 16px 0 20px;
+      font-size: 12px;
+    }
+    .flow span {
+      padding: 4px 10px;
+      background: #f5f5f3;
+      border: 1px solid #ebebea;
+      color: #555;
+      border-radius: 2px;
+    }
+    .flow .arrow { background: none; border: none; color: #ccc; padding: 4px 2px; }
+    .highlight {
+      margin: 20px 0;
+      padding: 20px 22px;
+      background: #fafaf8;
+      border-left: 3px solid #111;
+      font-size: 14px;
+      color: #444;
+      line-height: 1.7;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 8px;
+      font-size: 13px;
+    }
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid #eee;
+    }
+    th {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #888;
+      background: #fafafa;
+      width: 38%;
+    }
+    td { color: #333; line-height: 1.6; }
+    tr:last-child th, tr:last-child td { border-bottom: none; }
+    ul {
+      margin: 8px 0 14px;
+      padding-left: 18px;
+      color: #333;
+    }
+    li { margin-bottom: 6px; }
+    .footer {
+      padding: 28px 48px 36px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .sign {
+      font-size: 14px;
+      color: #333;
+    }
+    .sign .name-sm { font-weight: 600; font-size: 16px; margin-bottom: 6px; }
+    .contact { font-size: 12px; color: #888; line-height: 1.8; }
+    .links { font-size: 12px; text-align: right; }
+    .links a { color: #111; text-decoration: none; border-bottom: 1px solid #ccc; }
+    .links a:hover { border-color: #111; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .page { border: none; box-shadow: none; }
+    }
+    @media (max-width: 600px) {
+      .header, .body, .footer { padding-left: 24px; padding-right: 24px; }
+      .header-top { flex-direction: column; }
+      .meta { text-align: left; }
+      th { width: 42%; }
+    }
+  </style>
+</head>
+<body>
+
+  <article class="page">
+
+    <header class="header">
+      <div class="header-top">
+        <div>
+          <h1 class="name">鲁越森</h1>
+          <p class="tagline">AI Agent 工程 · B2B 销售智能化</p>
+        </div>
+        <div class="meta">
+          <strong>27 届</strong> · 2026.07.10 可到岗<br />
+          5 天/周 · 3–6 个月<br />
+          接受广州 onsite
+        </div>
+      </div>
+      <p class="to-line">致：探迹科技招聘团队 · <a href="mailto:recruitment@tungee.com" style="color:#111;">recruitment@tungee.com</a></p>
+    </header>
+
+    <div class="body">
+
+      <p class="lead">
+        您好！在 <a href="https://www.tungee.com/about/join-us/" style="color:#111;">探迹「加入我们」</a> 了解到贵司以大数据与人工智能推动 B2B 销售增长，尤其关注从「工具 SaaS」向 <strong>AI 销售云 + 数字员工</strong> 的演进，故致信自荐。
+      </p>
+
+      <h2>为何想加入探迹</h2>
+
+      <p>探迹构建了完整的 <strong>AI 销售云</strong> 闭环，而非单一获客工具：</p>
+
+      <div class="flow">
+        <span>AI 拓客</span><span class="arrow">→</span>
+        <span>AI 集客</span><span class="arrow">→</span>
+        <span>AI 触达</span><span class="arrow">→</span>
+        <span>AI CRM</span><span class="arrow">→</span>
+        <span>探迹 APP</span>
+      </div>
+
+      <p>
+        全量客户、精准拓客、商机推送与风险监测，衔接智能客服与营销表单，再经呼叫中心、邮件/短信触达与商情洞察，最终沉淀至客资管理与智能评级——形成从线索发现、批量触达到跟进成单的销售闭环。这与我在 B2B 场景跑通的「发现 → 背调 → 触达 → 管理」链路高度同构。
+      </p>
+
+      <p>
+        在 <strong>AI Agent</strong> 层，探迹已推出拓客 Agent、智能筛选、AI 商机、智能话术、智能总结，将 Agent 嵌入销售主流程。公开报道中强调的 <strong>「AI 拓客，真人成交」</strong>，与我做 Multi-Agent 平台时的 <strong>Human-in-the-Loop</strong> 理念一致：AI 提效前置研判与执行，真人聚焦谈判与转化。
+      </p>
+
+      <div class="highlight">
+        面向出海的 Futern、探迹大数据研究院对 B2B 行业的持续研究，以及「开箱即用」的数字员工产品形态——正是我希望深入学习的方向：把 Agent 做成可规模交付的数字生产力，而非单点脚本。
+      </div>
+
+      <h2>我能贡献什么</h2>
+
+      <table>
+        <tr>
+          <th>拓客 Agent / 潜客优先级</th>
+          <td>Multi-Agent 平台：Serper 搜索/地图发现、网页深掘、画像生成、线索评分跑批</td>
+        </tr>
+        <tr>
+          <th>智能触达 / 话术</th>
+          <td>批量背调 + LLM 生成针对性开发信；CANMAX 数智化触达自动化</td>
+        </tr>
+        <tr>
+          <th>销售闭环 / CRM</th>
+          <td>开发池→客户池双池、Console 对话 + 审批链锁定外发 payload</td>
+        </tr>
+        <tr>
+          <th>证据链 / 可解释推荐</th>
+          <td>背调流水线输出结构化销售情报（画像、破冰证据、痛点推断）</td>
+        </tr>
+        <tr>
+          <th>B2B / 外贸场景</th>
+          <td>5+ 套 B2B 官网交付；RPA+AI 获客 10 万+ 条；外贸 SaaS 多源采集 pipeline</td>
+        </tr>
+        <tr>
+          <th>Agent 工程化</th>
+          <td>Page Agent CLI 开源；Claude Skills / MCP 集成；Spec 驱动交付</td>
+        </tr>
+      </table>
+
+      <p style="margin-top:20px;font-size:14px;color:#555;">
+        日常 Cursor + Claude Code 开发，重视可复用、可审计、可观测——与探迹「成就客户、创新进取、正直诚信」的价值观相符：对客户结果负责，不对 Demo 负责。
+      </p>
+
+      <h2>附件</h2>
+      <ul>
+        <li>简历 PDF（随信附上）</li>
+        <li>作品集：<a href="https://profile.imatrix.tech/" style="color:#111;">profile.imatrix.tech</a></li>
+        <li>GitHub：<a href="https://github.com/sdyuyouth" style="color:#111;">github.com/sdyuyouth</a></li>
+      </ul>
+
+      <p>
+        若当前开放职位暂无完全匹配编制，也欢迎将我纳入 AI Agent、AI 拓客/触达、B2B 销售云相关方向的实习候选。期待有机会向探迹团队学习，并把已验证的 Agent 工作流贡献到贵司「数字销售员工」的产品实践中。
+      </p>
+
+      <p style="margin-top:24px;">感谢审阅。</p>
+
+    </div>
+
+    <footer class="footer">
+      <div class="sign">
+        <div class="name-sm">鲁越森</div>
+        <div class="contact">
+          15153945240<br />
+          2629133574@qq.com<br />
+          微信 xstw170
+        </div>
+      </div>
+      <div class="links">
+        2026 年 6 月<br /><br />
+        <a href="https://www.tungee.com/about/join-us/">tungee.com/join-us</a>
+      </div>
+    </footer>
+
+  </article>
+
+</body>
+</html>
