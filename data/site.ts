@@ -65,7 +65,7 @@ export const site = {
 
 export const profile = {
   age: 21,
-  grade: "大三在读",
+  grade: "大四离校待岗",
   school: "山东青年政治学院",
   major: "大数据与财务管理",
   hometown: "山东临沂",
