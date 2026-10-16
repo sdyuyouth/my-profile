@@ -89,7 +89,97 @@
 
 ---
 
-## 项目经历
+## 项目经验（表单填写版）
+
+> 字段限制：名称≤50 / 角色≤20 / 工具≤20 / 简述≤1000。团队人数无档案精确值时取合理估计，不对可改。
+
+### 项目经验1 · 山青院跨境电商运营项目（优先填）
+
+| 字段 | 内容 |
+|------|------|
+| 项目名称 | 山青院跨境电商运营项目 |
+| 起止时间 | 2024-03 ~ 2026-07 |
+| 职位/角色 | 技术总监 |
+| 团队人数 | 8 |
+| 使用工具 | Python/Selenium/WP |
+
+**项目简述（可直接粘贴）：**
+
+从0到1负责项目技术方向与交付，独立对接山东海龙元、山东榄程（徐工官方代理）、山东宝格、浙江凯利浦等外贸客户，统筹「独立站+获客+触达+运营」完整链路。独立开发并上线5+套生产级B2B官网（Payload+Astro+Cloudflare/WordPress）；推动技术栈标准化，第二单起复用模板将交付周期从数周缩短至数天。搭建RPA+AI自动化流水线，多源采集潜客10万+条；批量URL自动抓站、AI两阶段背调，输出结构化销售情报；基于背调结果用LLM批量生成针对性开发信；对接Facebook、LinkedIn、YouTube、TikTok社媒矩阵自动发布。一个月内将wisemanloader.com优化至Google「hofrac loader」关键词首页。
+
+### 项目经验2 · B2B外贸智能体平台
+
+| 字段 | 内容 |
+|------|------|
+| 项目名称 | B2B外贸智能体平台 |
+| 起止时间 | 2026-06 ~ 2026-07 |
+| 职位/角色 | 独立开发者 |
+| 团队人数 | 1 |
+| 使用工具 | React/FastAPI/MAF |
+
+**项目简述：**
+
+面向外贸场景的Multi-Agent系统：Console对话入口+Microsoft Agent Framework编排，子Agent覆盖客户管理、触达、企业模型；开发池→客户池双池生命周期，Human-in-the-Loop审批链锁定外发payload；分域Neo4j记忆、Serper批量获客、dynamic_profile画像设计器。React+shadcn管理台，FastAPI后端，PostgreSQL+Neo4j。按34篇Spec文档SDD驱动开发，本地联调Console/双池/审批/Serper跑批。
+
+### 项目经验3 · CANMAX企业官网
+
+| 字段 | 内容 |
+|------|------|
+| 项目名称 | CANMAX企业官网 |
+| 起止时间 | 2026-04 ~ 2026-05 |
+| 职位/角色 | 全栈开发 |
+| 团队人数 | 1 |
+| 使用工具 | Astro/Payload/CF |
+
+**项目简述：**
+
+CANMAX机械设备品牌多语言B2B官网，已生产上线。Payload CMS管理产品/新闻/媒体，Astro生成SEO友好静态页；6语言+RTL，Cloudflare Workers+D1+R2边缘部署；编写旧站迁移、CSV导入、图片CDN修复脚本；Push main触发Deploy Hook自动构建。从Spec到上线完整走通Vibe Coding交付流程。
+
+### 项目经验4 · AI调查问卷平台
+
+| 字段 | 内容 |
+|------|------|
+| 项目名称 | AI调查问卷平台 |
+| 起止时间 | 2025-10 ~ 2025-12 |
+| 职位/角色 | 独立开发者 |
+| 团队人数 | 1 |
+| 使用工具 | React/Hono/CF |
+
+**项目简述：**
+
+Cloudflare全栈问卷平台，已生产上线。React+Hono+D1+R2+Workflows；DeepSeek驱动一句话生成问卷与「结论先行」模拟数据（逆向概率分布批量生成千级填写记录）；Dashboard集成Chart.js做NPS/交叉/聚类分析。
+
+### 项目经验5 · Page Agent CLI
+
+| 字段 | 内容 |
+|------|------|
+| 项目名称 | Page Agent CLI |
+| 起止时间 | 2026-05 ~ 2026-06 |
+| 职位/角色 | 独立开发者 |
+| 团队人数 | 1 |
+| 使用工具 | TypeScript/CDP |
+
+**项目简述：**
+
+基于Chrome CDP的浏览器自动化CLI，供OpenClaw、Claude Code等Agent以子进程spawn调用。解决「重开浏览器丢登录态」与「每次新对话从零说明页面」两大痛点：teach录制人工操作、replay回放沉淀脚本；标准stdin/stdout接口，任意Agent可接入。Fork自Alibaba page-agent，持续跟进upstream。
+
+### 项目经验6 · 外贸报价单Agent Skill
+
+| 字段 | 内容 |
+|------|------|
+| 项目名称 | 外贸报价单Agent Skill |
+| 起止时间 | 2026-06 ~ 2026-06 |
+| 职位/角色 | 独立开发者 |
+| 团队人数 | 1 |
+| 使用工具 | Python/docxtpl |
+
+**项目简述：**
+
+封装为Skill的外贸报价工具：适配企业现有Word PI/Excel报价单模板，对话收集品名、MOQ、Incoterms等字段后一键生成.docx/.xlsx，版式与客户现有单证一致。Python+docxtpl+openpyxl。
+
+---
+
+## 项目经历（归档原文）
 
 ### 1. B2B 外贸智能体平台
 
@@ -223,6 +313,46 @@ Python 3.10 · PyTorch 2.1 · timm · ViT-Small · CUDA · TensorBoard · scikit
 | 大学英语四级（CET-4） | — |
 | 初级会计师 | — |
 | 普通话证书 | 二甲 |
+
+---
+
+## IT 技能
+
+> 表单字段：技能（≤20 字）/ 熟练度 / 使用时间（月）。熟练度若只有「了解·熟悉·熟练·精通」，把下表「掌握」改成「熟练」。
+
+| 技能 | 熟练度 | 使用时间（月） | 依据（勿填进表单） |
+|------|--------|----------------|-------------------|
+| Python | 掌握 | 24 | 算法竞赛、RPA、Agent、报价 Skill、背调流水线 |
+| TypeScript | 掌握 | 12 | Page Agent CLI、作品集、Agent 管理台、CANMAX |
+| React | 掌握 | 10 | 问卷平台、Agent Console、作品集 |
+| FastAPI | 熟悉 | 8 | B2B Agent 后端、康麦斯 AI 工作流 |
+| Vue | 熟悉 | 6 | 中企动力外贸 SaaS |
+| Cloudflare | 熟悉 | 9 | 问卷（D1/R2/Workers）、CANMAX 边缘部署 |
+| Docker | 熟悉 | 16 | 中企动力容器化、本地联调环境 |
+| Redis | 熟悉 | 6 | 中企动力 Celery 队列 |
+| PostgreSQL | 熟悉 | 3 | Agent 平台主库迁移 |
+| Selenium | 熟悉 | 18 | 中企浏览器池、校企 RPA、背调兜底 |
+| Playwright | 熟悉 | 6 | crawl4ai 抓站链路 |
+| Git | 掌握 | 24 | 全项目协作与开源维护 |
+| Next.js | 熟悉 | 4 | 个人作品集静态导出 |
+| Astro | 熟悉 | 6 | CANMAX / B2B 建站模板 |
+| PyTorch | 了解 | 4 | 山青智诊国赛（ViT 微调） |
+| Neo4j | 了解 | 2 | Agent 分域记忆（近期） |
+
+**建议优先填这 10 条**（贴 AI 全栈岗、又能讲清项目）：
+
+1. Python · 掌握 · 24  
+2. TypeScript · 掌握 · 12  
+3. React · 掌握 · 10  
+4. FastAPI · 熟悉 · 8  
+5. Vue · 熟悉 · 6  
+6. Cloudflare · 熟悉 · 9  
+7. Docker · 熟悉 · 16  
+8. Redis · 熟悉 · 6  
+9. Selenium · 熟悉 · 18  
+10. Git · 掌握 · 24  
+
+其余有空再加；**别填「精通」**，实习岗填精通容易被追问翻车。
 
 ---
 

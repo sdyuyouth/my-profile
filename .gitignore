@@ -16,3 +16,6 @@ books/
 # local archives and accidental artifacts
 *.zip
 h.includes('post')
+
+# personal drafts, not part of the public site
+Autobiography/

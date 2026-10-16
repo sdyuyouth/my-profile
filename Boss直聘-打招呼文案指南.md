@@ -65,6 +65,7 @@ Boss 的「立即沟通」首条消息 ≈ **30 秒电梯_pitch**，不是完整
    - 作品集：https://profile.imatrix.tech/
    - 简历pdf下载：https://profile.imatrix.tech/resume/luyuesen-ai-app-dev-27.pdf
 4. 系统默认那句「希望您能看看我的资料」不能当完成。没发常用语 = 没打完。
+5. 主搜 **FDE工程师**（实习/应届）。机器人、芯片、国防 IoT 仍跳过。
 
 
 ### D. 2B / 华为 Group IT / Harness / WeClaw

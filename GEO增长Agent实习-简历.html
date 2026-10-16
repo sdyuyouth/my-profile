@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>鲁越森 · AI Agent / GEO 增长自动化 实习生</title>
+<style>
+  :root {
+    --ink: #16181d;
+    --body: #33373f;
+    --muted: #6b7280;
+    --line: #e3e6ea;
+    --accent: #2f6f3e;
+    --accent-soft: #eef5ef;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #f4f5f7;
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 46px 52px 52px;
+    box-shadow: 0 2px 24px rgba(0,0,0,.08);
+  }
+
+  /* ---------- header ---------- */
+  header { border-bottom: 2px solid var(--ink); padding-bottom: 16px; margin-bottom: 22px; }
+  h1 { font-size: 27px; margin: 0 0 4px; color: var(--ink); letter-spacing: .5px; font-weight: 700; }
+  .role { font-size: 14.5px; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
+  .meta { font-size: 12px; color: var(--muted); line-height: 1.9; }
+  .meta a { color: var(--body); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .avail {
+    display: inline-block; margin-top: 9px; padding: 3px 11px;
+    background: var(--accent-soft); color: var(--accent);
+    border-radius: 3px; font-size: 12px; font-weight: 600;
+  }
+
+  /* ---------- sections ---------- */
+  h2 {
+    font-size: 13px; color: var(--ink); margin: 26px 0 12px;
+    padding-bottom: 5px; border-bottom: 1px solid var(--line);
+    letter-spacing: 2.5px; font-weight: 700;
+  }
+
+  .intro { font-size: 12.8px; }
+  .intro p { margin: 0 0 9px; }
+  .intro strong { color: var(--ink); }
+
+  /* ----------项目条目 ---------- */
+  .item { margin-bottom: 20px; page-break-inside: avoid; }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+  .item-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .item-date { font-size: 11.5px; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .item-sub { font-size: 11.5px; color: var(--muted); margin: 2px 0 7px; }
+  .item-lead { margin: 0 0 8px; }
+
+  ul { margin: 0; padding-left: 17px; }
+  li { margin-bottom: 5px; }
+  li strong, .item-lead strong { color: var(--ink); font-weight: 600; }
+
+  a { color: var(--accent); }
+
+  /* ---------- 四引擎表 ---------- */
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 10px; font-size: 12px; }
+  th, td { text-align: left; padding: 6px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #fafbfc; font-weight: 600; color: var(--ink); font-size: 11.5px; }
+  td:first-child { white-space: nowrap; font-weight: 600; color: var(--ink); }
+
+  /* ---------- 技能 ---------- */
+  .skill-row { display: flex; gap: 12px; margin-bottom: 8px; align-items: baseline; }
+  .skill-key { flex: 0 0 96px; font-weight: 700; color: var(--ink); font-size: 12px; }
+  .skill-val { flex: 1; font-size: 12.3px; color: var(--body); }
+
+  /* ---------- JD 对照 ---------- */
+  .match td:first-child { white-space: normal; width: 33%; }
+  .match tr.plus td:first-child { color: var(--accent); }
+
+  .note { font-size: 11.5px; color: var(--muted); font-style: normal; margin-top: 6px; }
+
+  footer { margin-top: 24px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--muted); }
+
+  /* ---------- print ---------- */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 10.4px; line-height: 1.55; }
+    .page { box-shadow: none; max-width: none; padding: 0; }
+    header { padding-bottom: 11px; margin-bottom: 15px; }
+    h1 { font-size: 22px; }
+    .role { font-size: 12.5px; margin-bottom: 7px; }
+    .meta { font-size: 10px; line-height: 1.7; }
+    .avail { margin-top: 6px; padding: 2px 8px; font-size: 10px; }
+    h2 { font-size: 11px; margin: 14px 0 8px; padding-bottom: 3px; }
+    .intro { font-size: 10.4px; }
+    .intro p { margin: 0 0 5px; }
+    .item { margin-bottom: 11px; }
+    .item-title { font-size: 11.6px; }
+    .item-date, .item-sub { font-size: 9.6px; }
+    .item-sub { margin: 1px 0 4px; }
+    .item-lead { margin: 0 0 5px; }
+    li { margin-bottom: 2.5px; }
+    table { font-size: 9.9px; margin: 5px 0 7px; }
+    th, td { padding: 3.5px 7px; }
+    th { font-size: 9.6px; }
+    .skill-row { margin-bottom: 5px; gap: 10px; }
+    .skill-key { flex-basis: 82px; font-size: 10px; }
+    .skill-val { font-size: 10.1px; }
+    .note { font-size: 9.6px; margin-top: 3px; }
+    footer { margin-top: 14px; padding-top: 9px; font-size: 9.8px; }
+    a { color: var(--ink); }
+    @page { margin: 11mm 13mm; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>鲁越森</h1>
+    <div class="role">AI Agent 开发 / GEO 增长自动化 · 实习生</div>
+    <div class="meta">
+      15153945240 · 2629133574@qq.com ·
+      <a href="https://github.com/sdyuyouth">github.com/sdyuyouth</a> ·
+      <a href="https://profile.imatrix.tech/">profile.imatrix.tech</a><br />
+      山东青年政治学院 · 大数据与财务管理 · 本科 27 届（2023.09–2027.06）
+    </div>
+    <div class="avail">可出勤：每周 5 天 · 可连续 6 个月以上 · 随时到岗</div>
+  </header>
+
+  <h2>我 是 谁</h2>
+  <div class="intro">
+    <p>外贸行业出来的开发者。先在一线做机械设备出口的获客和独立站运营，被重复劳动逼着开始写自动化，再用 Claude Code 把整条运营链路做成了 Agent 系统。</p>
+    <p>所以我看 GEO 不是「一个需要优化的技术指标」，而是<strong>「客户在 ChatGPT 里问哪款装载机好，我们的站能不能被抠出来引用」</strong>——这两年我一直在拿真实业务验证这件事。</p>
+    <p>近两个月的主力项目 GEO Decision Engine 是自研的 GEO 决策引擎（<strong>105 次提交、2.5 万行 TypeScript、8 个 AI 平台真联网采样</strong>），已封装成 Claude Code Skill 供 Agent 调用。这份 JD 里的每一条职责，我都在这个项目里做过一遍。</p>
+  </div>
+
+  <h2>项 目 经 历</h2>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">GEO Decision Engine · 自研 GEO 决策引擎 + Claude Code Skill</span>
+      <span class="item-date">2026.07 – 至今</span>
+    </div>
+    <div class="item-sub">独立开发 · TypeScript / Node 20 / SQLite / Postgres / Next.js 15</div>
+    <p class="item-lead">给任意通用 AI Agent 提供 GEO 专业能力的决策引擎。<strong>分工是刻意设计的：Agent 负责执行（写、改、发布），引擎负责评审、评估、建议、记账</strong>——让 LLM 同时当运动员和裁判，打分一定虚高。</p>
+
+    <table>
+      <tr><th style="width:15%">引擎</th><th style="width:30%">回答的问题</th><th>实现</th></tr>
+      <tr><td>Review</td><td>这篇写得怎么样、怎么改</td><td>约 20 项确定性检查 + 段落级可引用性打分 + LLM 评审</td></tr>
+      <tr><td>Evaluation</td><td>GEO 到底有没有效果</td><td>8 平台每日采样，提及率/引用率按站独立计算 + 缺口分析</td></tr>
+      <tr><td>Recommend</td><td>下一步该写什么</td><td>数据驱动的选题生成 + 按站点出内容发布计划</td></tr>
+      <tr><td>Attribution</td><td>哪次改动起了作用</td><td>改动日志 + 时间线对齐（当前只记账，未做归因）</td></tr>
+    </table>
+
+    <ul>
+      <li><strong>评分底层认知：AI 引用的是段落，不是页面。</strong>按标题切块做段落级评估（答案块质量 30% / 自包含 25% / 可读性 20% / 事实密度 15% / 独特性 10%），页面分取最好 5 块的均分，而非给整页一个笼统分。依据是 AI 偏好 134–167 词的自包含段落。</li>
+      <li><strong>SSR 一票否决。</strong>AI 爬虫不执行 JS——客户端渲染的漂亮页面在 GEO 视角下约等于空白页，这条直接否决、不参与加权。</li>
+      <li><strong>国产平台我砍掉了两家。</strong>GLM 与混元实测只对时效新闻触发搜索，常青采购题（GEO 主力题型）纯靠记忆回答——采出来是<strong>假可见性</strong>，比没有数据更危险。宁可少两个平台也不污染数据。</li>
+      <li><strong>中转站不能想当然。</strong>实测中转的 <code>/chat/completions</code> 四模型全部无联网能力，因此采样按各平台原生协议分别打（ChatGPT <code>/v1/responses</code>+web_search、Gemini <code>/v1beta</code>+google_search、Claude <code>/v1/messages</code>+官方搜索工具），评审生成才走 OpenAI 兼容。全部有实测记录。</li>
+      <li><strong>采样按 RPM 持续派发、不等响应返回</strong>，整轮耗时 ≈ 单次最慢延迟而非「次数 × 延迟」；30 条豆包从串行 45 分钟压到 2 分钟。</li>
+      <li><strong>花钱的地方全有护栏</strong>：日预算熔断、平台开关、<code>--dry-run</code> 预估、每轮上限，本地账本按平台分账。</li>
+      <li><strong>闭环</strong>：Agent 写内容 → <code>geo review</code>（&lt;70 分继续改）→ 发布 → <code>geo action</code> 记账 → 每日采样 → <code>report / gaps / plan</code> 拿下一轮指导。</li>
+      <li><strong>产品化</strong>：双层 Web 后台（平台超管 / 租户控制台）、积分账本、先扣费后执行失败退款、pg-boss 定时任务（采样 / 页面观测 / 告警 / 周报）、Docker 部署。</li>
+    </ul>
+    <div class="note">仅本地与私有部署，未公开；可在面试中现场演示完整链路。</div>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">B2B 外贸智能体平台 · 多 Agent 获客与触达系统</span>
+      <span class="item-date">2026.06 – 至今</span>
+    </div>
+    <div class="item-sub">独立开发 · Microsoft Agent Framework / FastAPI / React / PostgreSQL / Neo4j</div>
+    <p class="item-lead">部署在客户服务器上的外贸 CRM 式 Agent 系统。<strong>对外发信 / WhatsApp 一律 Human-in-the-Loop，审批链本身就是产品核心</strong>——外贸触达一旦群发翻车，损失的是客户信任，不是几条 API 调用。</p>
+    <ul>
+      <li><strong>任务拆解</strong>：建活动 → Serper 跑批进开发池 → AI 评分认定进客户池 → enrich 补全 → 触达草稿 → 审批中心锁定 sendPayload（SHA256 防篡改）→ 外发。每步都是可独立执行、可重试、可断点续跑的原子步骤。</li>
+      <li><strong>四 Agent 协作</strong>：Console 作对话入口，MAF <code>as_tool</code> 委派客户管理 / 触达 / 企业模型；子 Agent headless 跑批，<strong>对外副作用不进自动通道</strong>。</li>
+      <li><strong>分域记忆</strong>：公司 know-how / 个人打法 / 客户私密事实按 scope 注入 Neo4j，防跨业务员泄密。</li>
+      <li>企业 ⊕ 个人双层模型：公司层 ICP、规则、模板 + 业务员私有话术人设，按操作人 runtime 合成。按 34 篇 Spec 文档 SDD 驱动开发。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Agent Skill 体系 · 把重复劳动一条条封装掉</span>
+      <span class="item-date">2026.03 – 至今</span>
+    </div>
+    <div class="item-sub">Python / Claude Code Skill</div>
+    <p class="item-lead">不是「学了 Skill 所以写几个 demo」，是每个 Skill 背后都有一件我自己烦够了的重复工作。</p>
+    <ul>
+      <li><strong>SEO 文章生成 Skill</strong>：给定标题与帖子类型，一次产出 1000+ 词 B2B 工程机械 SEO 英文文章。核心是<strong>降 AI 率的工程化规则</strong>——同轮内分五部分连续生成规避截断、简单词替换表、禁用过渡套话、口语化标题与 FAQ、五类模式化句式黑名单。<strong>实测 AI 检测率降至 2% 以下</strong>，配套自动出 Word 并投递邮箱。</li>
+      <li><strong>GEO Agent Skill</strong>：编排 GEO 引擎 CLI，只编排不复刻业务逻辑。</li>
+      <li><strong>外贸报价单 Skill</strong>：适配企业<strong>现有</strong>的 Word PI / Excel 报价单模板（不是通用填空表），对话收集品名、MOQ、Incoterms 后直接出可发客户的单证。docxtpl + openpyxl。</li>
+      <li><strong>B2B 客户背调流水线</strong>：Excel 批量 URL → crawl4ai 抓站 → <strong>两阶段 AI 门禁</strong>（快模型先判是否目标客户并选 3–5 子页，非目标直接过滤，避免深度模型全量消耗）→ 输出 Pydantic 约束的结构化销售情报。断点续跑、Selenium 二轮兜底、代理回退，适合千级 URL 长任务；换行业只改 Prompt 不改代码。</li>
+    </ul>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">Page Agent CLI · 浏览器自动化</span>
+      <span class="item-date">2026.05 – 2026.06</span>
+    </div>
+    <div class="item-sub">TypeScript / Chrome CDP · <a href="https://github.com/sdyuyouth/page-agent-cli">github.com/sdyuyouth/page-agent-cli</a></div>
+    <p class="item-lead">基于 CDP 接管用户<strong>已打开</strong>的 Chrome 而非另起无头实例——保留登录态与人工操作上下文。<code>teach</code> 录制一次人工演示、<code>replay</code> 回放，把操作序列沉淀成可复用脚本，解决「每次新对话从零讲页面结构」的沟通成本。标准 stdin/stdout 接口，任意 Agent 可 spawn 调用。Fork 自 Alibaba page-agent 并持续同步 upstream。</p>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">生产级 B2B 独立站交付</span>
+      <span class="item-date">2024.03 – 至今</span>
+    </div>
+    <div class="item-sub">Astro / Payload CMS / Cloudflare Workers · D1 · R2</div>
+    <ul>
+      <li>独立交付 5+ 套上线的多语言 B2B 企业站，客户含山东海龙元、山东榄程（徐工官方代理）、浙江凯利浦等。</li>
+      <li><strong><a href="https://www.wisemanloader.com">wisemanloader.com</a>：一个月做到 Google「hofrac loader」关键词首页。</strong></li>
+      <li><a href="https://canmax-corporate-site.pages.dev/en/">CANMAX 官网</a>：6 语言 + RTL，Cloudflare 边缘部署，Push main 触发 Deploy Hook 自动发布（已开源）。</li>
+      <li>推动模板标准化，第二单起交付周期从数周压到数天，已抽象为<a href="https://github.com/sdyuyouth/payload-astro-cloudflare-starter">开源脚手架</a>。</li>
+    </ul>
+  </div>
+
+  <h2>实 习 与 工 作 经 历</h2>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">上海康麦斯机电设备有限公司 · 数智化工程师</span>
+      <span class="item-date">2026.01 – 2026.06</span>
+    </div>
+    <p class="item-lead">外贸业务数智化落地：搭建 AI Agent 工作流与 SEO/GEO 自动化链路，覆盖内容生成、站点审计、结构化数据与发布；多品牌官网建设与跨境代理网络搭建；把 Claude Skill、报价单生成、浏览器自动化整合为可复用工作流。</p>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">中企动力科技股份有限公司 · 全栈开发工程师</span>
+      <span class="item-date">2025.02 – 2025.04</span>
+    </div>
+    <p class="item-lead">外贸客户管理 SaaS 的多源获客模块：Facebook Graph API、Google Maps Places、广交会数据统一接入与清洗 pipeline。Vue 3 + Django REST，Redis 分布式队列 + Celery Worker 异步爬取，Selenium 浏览器池化 + Docker 部署。两个月完成核心模块并投入内测。</p>
+  </div>
+
+  <div class="item">
+    <div class="item-head">
+      <span class="item-title">山东青年政治学院 · 跨境电商运营项目 · 技术总监</span>
+      <span class="item-date">2024.03 – 至今</span>
+    </div>
+    <p class="item-lead">从 0 到 1 负责技术方向与交付，统筹「独立站 + 获客 + 触达 + 运营」全链路。定制 RPA 累计抓取潜客 <strong>10 万+ 条</strong>；基于背调结果用 LLM 批量生成针对性开发信；对接 Facebook、LinkedIn、YouTube、TikTok 社媒矩阵自动发布。</p>
+  </div>
+
+  <h2>技 能</h2>
+  <div class="skill-row"><div class="skill-key">Agent / Skill</div><div class="skill-val">Claude Code Skill 开发与迭代 · SubAgent 编排 · Microsoft Agent Framework · MCP · HITL 审批设计 · SSE 流式 · 工具按需激活 · n8n / Dify / Coze</div></div>
+  <div class="skill-row"><div class="skill-key">提示词工程</div><div class="skill-val">System Prompt 设计与迭代 · 多通道模型分工（深度分析 / 高吞吐评审 / 联网采样按成本难度分流）· prompt 库效果度量与规则化淘汰 · 结构化输出约束（Pydantic / JSON Schema）· 降 AI 率写作规则</div></div>
+  <div class="skill-row"><div class="skill-key">编程</div><div class="skill-val">TypeScript / Node.js（主力）· Python · React / Next.js / Vue 3 · FastAPI / Hono / Django · SQLite / PostgreSQL / Neo4j / Redis · CLI 工具开发 · Git</div></div>
+  <div class="skill-row"><div class="skill-key">API 与自动化</div><div class="skill-val">Serper · Perplexity · DeepSeek · Kimi · 豆包 · 千问 · Gemini · OpenAI 兼容中转 · Google Search Console / GA4 · Facebook Graph · Google Maps Places · crawl4ai / Playwright / Selenium / Chrome CDP · Docker</div></div>
+  <div class="skill-row"><div class="skill-key">SEO / GEO</div><div class="skill-val">段落级可引用性 · Schema.org / sameAs · llms.txt · AI 爬虫权限 · SSR 与 AI 可读性 · hreflang / 多语言 i18n · Cloudflare Pages / Workers 部署</div></div>
+
+  <h2>对 照 这 份 J D</h2>
+  <table class="match">
+    <tr><th>要求</th><th>我的证据</th></tr>
+    <tr><td>基于 Claude Code 开发 Agent Skill</td><td>geo-agent、SEO 文章生成、报价单等多个在用 Skill；Skill 只编排不复刻业务逻辑</td></tr>
+    <tr><td>API 连接搜索与社媒工具</td><td>Serper、8 个 AI 平台原生联网协议、GSC / GA4、Facebook Graph、Google Maps</td></tr>
+    <tr><td>GEO 流程拆解为原子步骤</td><td>四引擎 + CLI 原子命令；<code>geo next</code> 综合数据直接排序下一步</td></tr>
+    <tr><td>竞品分析</td><td>prompt 库审计规则：竞品高频而我方 0 提及的题标记为「高价值战场」</td></tr>
+    <tr><td>多语言内容生成</td><td>SEO 文章 Skill（低 AI 率）+ 6 语言站点交付 + 按市场本地化评审</td></tr>
+    <tr><td>获客线索挖掘</td><td>Google/Bing 自动补全 + Serper「People Also Ask」+ 询盘文本提炼；背调流水线；RPA 10 万+ 条</td></tr>
+    <tr><td>提示词工程与稳定性</td><td>多通道分工、结构化输出约束、prompt 效果数据化淘汰</td></tr>
+    <tr><td>快速迭代与数据反馈</td><td>采样 → 报告 → 缺口 → 计划 → 记账闭环；每日定时任务</td></tr>
+    <tr class="plus"><td>加分：RAG / AI 搜索算法认知</td><td>段落级切块与可引用性打分、SSR 一票否决、AI 信任域名榜、各平台引用元数据解析差异</td></tr>
+    <tr class="plus"><td>加分：实际 Agent 搭建经验</td><td>GEO 引擎 + B2B 多 Agent 平台均为纯代码构建；也用过 n8n / Dify</td></tr>
+    <tr class="plus"><td>加分：GitHub 活跃项目</td><td>page-agent-cli、canmax-corporate-site、payload-astro-cloudflare-starter</td></tr>
+    <tr class="plus"><td>加分：机器人行业 / 出海营销 / B2B 获客</td><td>两年工程机械出口一线，客户含徐工官方代理；全部项目都长在这个场景里</td></tr>
+  </table>
+
+  <footer>
+    全球校园人工智能算法大赛 · 全国总决赛三等奖（乳腺超声 AI 辅助诊断，ViT + 多任务特征识别）<br />
+    全国计算机等级二级 · CET-4 · 初级会计师 · 三年一等奖学金 · 中共党员
+  </footer>
+
+</div>
+</body>
+</html>

@@ -227,7 +227,7 @@ python .tools/boss-list-friends.py   # 若有；否则见 .tools/boss-friends-fu
   作品集 `https://profile.imatrix.tech/`  
   简历 PDF `https://profile.imatrix.tech/resume/luyuesen-ai-app-dev-27.pdf`
 - 发出的每一条写入 `Boss直聘-每日打招呼台账.md`，当天满 150 停。
-- 关键词：外贸实习、跨境实习、独立站实习、探迹、积加、领星、XTransfer、焦点、阿里国际站。  
+- 关键词：**FDE工程师**、FDE实习、前沿部署工程师；不够再补外贸实习。  
   **不再搜**「解决方案工程师」「实施工程师」。
 - 到岗口径：**可立即到岗**（原 7.10 已过）。
 
